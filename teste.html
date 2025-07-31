@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dropdown com Input</title>
+  <style>
+    .dropdown-container {
+      position: relative;
+      width: 250px;
+    }
+
+    .input-dropdown {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .dropdown-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      border: 1px solid #ccc;
+      background-color: white;
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none; /* escondido por padrão */
+    }
+
+    .dropdown-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .dropdown-item:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="dropdown-container">
+  <input type="text" id="searchInput" class="input-dropdown" placeholder="Buscar...">
+  <div class="dropdown-list" id="dropdownList">
+    <div class="dropdown-item">One</div>
+    <div class="dropdown-item">Two</div>
+    <div class="dropdown-item">Three</div>
+    <div class="dropdown-item">Four</div>
+    <div class="dropdown-item">Five</div>
+  </div>
+</div>
+<div class="dropdown-container">
+  <input type="text" class="input-dropdown" placeholder="Buscar...">
+  <div class="dropdown-list">
+    <div class="dropdown-item"><li>One</li></div>
+    <div class="dropdown-item">Two</div>
+    <div class="dropdown-item">Three</div>
+    <div class="dropdown-item">Four</div>
+    <div class="dropdown-item">Five</div>
+  </div>
+</div>
+
+<script>
+  // Seleciona todos os containers
+  const containers = document.querySelectorAll('.dropdown-container');
+
+  containers.forEach(container => {
+    const input = container.querySelector('.input-dropdown');
+    const dropdown = container.querySelector('.dropdown-list');
+    const items = Array.from(dropdown.querySelectorAll('.dropdown-item'));
+
+    // Mostrar dropdown ao focar no input
+    input.addEventListener('focus', () => {
+      dropdown.style.display = 'block';
+    });
+
+    // Filtrar itens enquanto digita
+    input.addEventListener('input', () => {
+      const filter = input.value.toLowerCase();
+      items.forEach(item => {
+        const match = item.textContent.toLowerCase().includes(filter);
+        item.style.display = match ? 'block' : 'none';
+      });
+    });
+
+    // Preencher input ao clicar em uma opção
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        input.value = item.textContent;
+        dropdown.style.display = 'none';
+      });
+    });
+  });
+
+  // Esconder dropdowns ao clicar fora
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('.dropdown-container').forEach(container => {
+      if (!container.contains(e.target)) {
+        container.querySelector('.dropdown-list').style.display = 'none';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
